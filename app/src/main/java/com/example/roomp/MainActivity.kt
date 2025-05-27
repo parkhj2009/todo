@@ -1,12 +1,11 @@
+@file:Suppress("DEPRECATION")
+
 package com.example.roomp
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Menu
-import android.window.SplashScreen
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,7 +13,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -26,7 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -47,7 +44,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -69,13 +65,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
-import java.util.logging.SimpleFormatter
 
 var base = Color(0xFF4F9F9C)
 
@@ -385,7 +377,7 @@ fun Menu(base: Color) {
             verticalArrangement = Arrangement.Top
         ) {
             val today = Date()
-            val formatter = SimpleDateFormat("EEE d MMMM YYYY", Locale.ENGLISH)
+            val formatter = SimpleDateFormat("EEE d MMMM yyyy", Locale.ENGLISH)
             val formattedDate = formatter.format(today)
 
             Text(
@@ -503,12 +495,8 @@ fun Menu(base: Color) {
                         .padding(top = 8.dp)
                         .fillMaxWidth()
                         .height(200.dp),
-                    )
+                )
             }
         }
     }
 }
-
-
-
-
