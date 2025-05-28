@@ -3,6 +3,7 @@
 package com.example.roomp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -21,8 +22,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -40,16 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import androidx.room.Dao
 import androidx.room.Database
 import androidx.room.Delete
@@ -214,119 +209,15 @@ fun SplashScreen() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Main(navController: NavController,
-         base: Color,
-         onBaseColorChange: (Color) -> Unit){
-    Scaffold(
-        containerColor = Color.White,
-        topBar = {
-            TopAppBar(
-                title = { Text("Menu Homepage") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = base,
-                    titleContentColor = Color.White
-                )
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1000.dp)
-                .padding(
-                    top = innerPadding.calculateTopPadding()
-                ),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-            Text(
-                text="Creat to do list",
-                modifier = Modifier
-                .fillMaxWidth()
-                    .padding(top = 40.dp),
-                textAlign=TextAlign.Center,
-
-                fontSize = 40.sp
-            )
-            Text(
-                text="Choose your to do list color theme:",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = 20.dp),
-                textAlign=TextAlign.Center,
-
-                fontSize = 15.sp
-            )
-            Image(
-                painter = painterResource(id = R.drawable.basic),
-                contentDescription = "Theme",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(120.dp)
-                    .size(400.dp)
-                    .clickable { onBaseColorChange(Color(0xFF4F9F9C)) }
-                    .offset(y =30.dp)
-            )
-
-            Image(
-                painter = painterResource(id = R.drawable.black),
-                contentDescription = "Theme",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(120.dp)
-                    .size(400.dp)
-                    .clickable { onBaseColorChange(Color(0xFF1b1c1f)) }
-                    .offset(y = 30.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.orange),
-                contentDescription = "Theme",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(120.dp)
-                    .size(400.dp)
-                    .clickable { onBaseColorChange(Color(0xFFd85040)) }
-                    .offset(y = 30.dp)
-            )
-            Image(
-                painter = painterResource(id = R.drawable.bluee),
-                contentDescription = "Theme",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .height(120.dp)
-                    .size(400.dp)
-                    .clickable { onBaseColorChange(Color(0xFF3875ea)) }
-                    .offset(y = 30.dp)
-            )
-            Button(
-                modifier = Modifier
-                    .offset(y = 50.dp)
-                    .padding(30.dp)
-                    .fillMaxWidth(),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = base, // 버튼 배경색
-                    contentColor = Color.White          // 텍스트 색상
-                ),
-                shape=RoundedCornerShape(10.dp),
-                onClick = {
-                    navController.navigate("menu")
-                }
-            ) {
-                Text("Open Todyapp")
-            }
-        }
-    }
-}
 
 //@Preview
 @Composable
 fun MyApp() {
-    val navController = rememberNavController()
+    val context = LocalContext.current
 
     var showSplash by remember { mutableStateOf(true) }
 
-    var baseColor by remember { mutableStateOf(Color(0xFF4F9F9C)) }
+    val baseColor by remember { mutableStateOf(Color(0xFF4F9F9C)) }
 
 
     LaunchedEffect(Unit) {
@@ -337,166 +228,9 @@ fun MyApp() {
     if (showSplash) {
         SplashScreen()
     } else {
-        NavHost(navController = navController, startDestination = "main") {
-            composable("main") {
-                Main(
-                    navController,
-                    base = baseColor,
-                    onBaseColorChange = { baseColor = it }
-                )
-            }
-            composable("menu") { Menu(base = baseColor) }
+        val intent = Intent(context, ThemeActivity::class.java).apply {
+            putExtra("Bcolor", baseColor.value.toLong())
         }
-    }
-}
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Menu(base: Color) {
-    var showInput by remember { mutableStateOf(false) }
-    var text by remember { mutableStateOf("") }
-    Scaffold(
-        containerColor = Color.White,
-        topBar = {
-            TopAppBar(
-                title = { Text("Menu Homepage") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = base,
-                    titleContentColor = Color.White
-                )
-            )
-        }
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(1000.dp)
-                .padding(
-                    top = innerPadding.calculateTopPadding()
-                ),
-            horizontalAlignment = Alignment.Start,
-            verticalArrangement = Arrangement.Top
-        ) {
-            val today = Date()
-            val formatter = SimpleDateFormat("EEE d MMMM yyyy", Locale.ENGLISH)
-            val formattedDate = formatter.format(today)
-
-            Text(
-                modifier = Modifier
-                    .padding(10.dp),
-                text = "Today",
-                fontSize = 30.sp
-            )
-            Text(
-                modifier = Modifier
-                    .padding(10.dp),
-                text = "Best platform for creating to-do list",
-                fontSize = 15.sp,
-                color = Color.Gray
-            )
-            Box(modifier = Modifier.clickable { showInput = true}) {
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .padding(
-                            top = 20.dp
-                        )
-                        .width(360.dp)
-                        .height(200.dp)
-                        .shadow(
-                            elevation = 8.dp,
-                            shape = RoundedCornerShape(16.dp),
-                            clip = true // 둥근 그림자와 함께 모양을 잘라줌
-                        )
-                        .background(Color.White, shape = RoundedCornerShape(16.dp))
-                )
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.TopCenter)
-                        .width(360.dp)
-                        .padding(
-                            top = 20.dp
-                        )
-                        .height(50.dp)
-                        .background(
-                            base, shape = RoundedCornerShape(
-                                topStart = 10.dp,
-                                topEnd = 10.dp,
-                                bottomStart = 0.dp,
-                                bottomEnd = 0.dp
-                            )
-                        )
-
-                )
-                Box(
-                    modifier = Modifier
-                        .offset(y = 50.dp)
-                        .align(Alignment.Center)
-                        .width(340.dp)
-                        .height(1.dp)
-                        .background(Color.Gray)
-                )
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    modifier = Modifier
-                        .padding(start = 56.dp, end = 65.dp)
-                        .fillMaxWidth()
-                        .offset(y = 90.dp),
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.plus),
-                        contentDescription = "plus",
-                        Modifier.size(35.dp)
-                    )
-                    Text(
-                        text = "Tap plus to creat a new task",
-                        textAlign = TextAlign.Center,
-                        fontSize = 23.sp,
-                    )
-                }
-                Row(
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .width(300.dp)
-                        .offset(x = 60.dp, y = 180.dp)
-                ) {
-                    Text(
-                        modifier = Modifier,
-                        text = "Add your task",
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Light,
-                        color = Color.Gray
-                    )
-                    Text(
-                        modifier = Modifier,
-                        text = formattedDate,
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Light,
-                        color = Color.Gray
-                    )
-
-                }
-
-            }
-            if (showInput) {
-                TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .height(200.dp),
-                    value = text,
-                    onValueChange = { text = it },
-                    label = { Text("eg : Meeting with client") },
-                )
-
-                Text(
-                    text="$text",
-                    modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth()
-                        .height(200.dp),
-                )
-            }
-        }
+        context.startActivity(intent)
     }
 }
