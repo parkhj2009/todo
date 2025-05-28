@@ -6,7 +6,6 @@
     import androidx.activity.compose.setContent
     import androidx.activity.enableEdgeToEdge
     import androidx.compose.foundation.Image
-    import androidx.compose.foundation.ScrollState
     import androidx.compose.foundation.clickable
     import androidx.compose.foundation.layout.Column
     import androidx.compose.foundation.layout.fillMaxWidth
