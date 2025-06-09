@@ -6,12 +6,15 @@
     import androidx.activity.compose.setContent
     import androidx.activity.enableEdgeToEdge
     import androidx.compose.foundation.Image
+    import androidx.compose.foundation.background
     import androidx.compose.foundation.clickable
+    import androidx.compose.foundation.layout.Box
     import androidx.compose.foundation.layout.Column
     import androidx.compose.foundation.layout.fillMaxWidth
     import androidx.compose.foundation.layout.height
     import androidx.compose.foundation.layout.padding
     import androidx.compose.foundation.layout.size
+    import androidx.compose.foundation.layout.width
     import androidx.compose.foundation.rememberScrollState
     import androidx.compose.foundation.shape.RoundedCornerShape
     import androidx.compose.foundation.verticalScroll
@@ -29,11 +32,13 @@
     import androidx.compose.runtime.setValue
     import androidx.compose.ui.Alignment
     import androidx.compose.ui.Modifier
+    import androidx.compose.ui.draw.shadow
     import androidx.compose.ui.graphics.Color
     import androidx.compose.ui.layout.ContentScale
     import androidx.compose.ui.platform.LocalContext
     import androidx.compose.ui.res.painterResource
     import androidx.compose.ui.text.style.TextAlign
+    import androidx.compose.ui.tooling.preview.Preview
     import androidx.compose.ui.unit.dp
     import androidx.compose.ui.unit.sp
 
@@ -44,6 +49,7 @@
             val baseColor = Color(colorValue.toULong())
             enableEdgeToEdge()
             setContent {
+
                 var currentBaseColor by remember { mutableStateOf(baseColor) }
                 Main(base = currentBaseColor, onBaseColorChange = { newColor ->
                     currentBaseColor = newColor
@@ -73,9 +79,8 @@
         ) { innerPadding ->
             Column(
                 modifier = Modifier
-                    .verticalScroll(scrollState)
+                    .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
-                    .height(1000.dp)
                     .padding(
                         top = innerPadding.calculateTopPadding()
                     ),
@@ -99,47 +104,22 @@
 
                     fontSize = 15.sp
                 )
-                Image(
-                    painter = painterResource(id = R.drawable.basic),
-                    contentDescription = "Theme",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(top = 30.dp)
-                        .height(120.dp)
-                        .size(400.dp)
-                        .clickable { onBaseColorChange(Color(0xFF4F9F9C)) }
-                )
+                color(Color(0xFF4F9F9C)) {
+                    onBaseColorChange(it)
+                }
 
-                Image(
-                    painter = painterResource(id = R.drawable.black),
-                    contentDescription = "Theme",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(top = 30.dp)
-                        .height(120.dp)
-                        .size(400.dp)
-                        .clickable { onBaseColorChange(Color(0xFF1b1c1f)) }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.orange),
-                    contentDescription = "Theme",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(top = 30.dp)
-                        .height(120.dp)
-                        .size(400.dp)
-                        .clickable { onBaseColorChange(Color(0xFFd85040)) }
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.bluee),
-                    contentDescription = "Theme",
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier
-                        .padding(top = 30.dp)
-                        .height(120.dp)
-                        .size(400.dp)
-                        .clickable { onBaseColorChange(Color(0xFF3875ea)) }
-                )
+                color(Color(0xFF1b1c1f)) {
+                    onBaseColorChange(it)
+                }
+
+                color(Color(0xFFd85040)) {
+                    onBaseColorChange(it)
+                }
+
+                color(Color(0xFF3875ea)) {
+                    onBaseColorChange(it)
+                }
+
                 Button(
                     modifier = Modifier
                         .padding(top = 50.dp)
@@ -162,3 +142,50 @@
             }
         }
     }
+
+
+    @Composable
+    fun color(base: Color, onClick:(Color)->Unit){
+        Box(
+            modifier = Modifier
+                .padding(
+                    top = 20.dp
+                )
+                .width(360.dp)
+                .height(100.dp)
+                .clickable {onClick(base)}) {
+            // 흰 부분
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .width(360.dp)
+                    .height(100.dp)
+                    .shadow(
+                        elevation = 8.dp,
+                        shape = RoundedCornerShape(16.dp),
+                        clip = true // 둥근 그림자와 함께 모양을 잘라줌
+                    )
+                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+            )
+
+            //색 부분
+            Box(
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .width(360.dp)
+                    .height(30.dp)
+                    .background(
+                        base, shape = RoundedCornerShape(
+                            topStart = 10.dp,
+                            topEnd = 10.dp,
+                            bottomStart = 0.dp,
+                            bottomEnd = 0.dp
+                        )
+                    )
+
+            )
+
+        }
+    }
+
+

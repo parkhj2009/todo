@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -22,6 +24,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
+import androidx.compose.material.icons.Icons
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -54,23 +59,33 @@ class CreateActivity : ComponentActivity() {
     }
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Menu(base: Color) {
     var text by remember { mutableStateOf("") }
     var showInput by remember { mutableStateOf(false) }
-    Scaffold(
-        containerColor = Color.White,
-        topBar = {
-            TopAppBar(
-                title = { Text("Menu Homepage") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = base,
-                    titleContentColor = Color.White
+    var title by remember { mutableStateOf("") }
+    var description by remember { mutableStateOf("") }
+    var al by remember { mutableStateOf(0.0f) }
+    Box(modifier = Modifier.fillMaxSize()){
+        Scaffold(
+            containerColor = Color.White,
+            topBar = {
+                TopAppBar(
+                    title = { Text("Menu Homepage") },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = base,
+                        titleContentColor = Color.White
+                    )
                 )
-            )
-        }
-    ) { innerPadding ->
+            }
+        ) { innerPadding ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = al))
+        )
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -98,7 +113,7 @@ fun Menu(base: Color) {
                 fontSize = 15.sp,
                 color = Color.Gray
             )
-            Box(modifier = Modifier.clickable { showInput = true }) {
+            Box(modifier = Modifier.clickable { showInput = true}) {
                 Box(
                     modifier = Modifier
                         .align(Alignment.TopCenter)
@@ -110,7 +125,7 @@ fun Menu(base: Color) {
                         .shadow(
                             elevation = 8.dp,
                             shape = RoundedCornerShape(16.dp),
-                            clip = true // 둥근 그림자와 함께 모양을 잘라줌
+                            clip = true
                         )
                         .background(Color.White, shape = RoundedCornerShape(16.dp))
                 )
@@ -150,7 +165,8 @@ fun Menu(base: Color) {
                     Image(
                         painter = painterResource(id = R.drawable.plus),
                         contentDescription = "plus",
-                        Modifier.size(35.dp)
+                        Modifier
+                            .size(35.dp)
                     )
                     Text(
                         text = "Tap plus to creat a new task",
@@ -185,23 +201,42 @@ fun Menu(base: Color) {
             }
             if (showInput) {
                 TextField(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 16.dp)
-                        .height(200.dp),
-                    value = text,
-                    onValueChange = { text = it },
-                    label = { Text("eg : Meeting with client") },
+                    value = title,
+                    onValueChange = { title = it },
+                    placeholder = { Text("eg : Meeting with client") },
+                    modifier = Modifier.fillMaxWidth(),
                 )
 
-                Text(
-                    text = text,
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // 설명 입력
+                TextField(
+                    value = description,
+                    onValueChange = { description = it },
+                    placeholder = { Text("Description") },
                     modifier = Modifier
-                        .padding(top = 8.dp)
-                        .fillMaxWidth()
-                        .height(200.dp),
+                        .fillMaxWidth(),
+
                 )
-            }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {             // 전송 버튼
+                    IconButton(onClick = {
+                        // 전송 로직
+                    }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_sent),
+                            contentDescription = "Send",
+                            tint = base
+                        )
+                    }
+                }
+            } }
         }
     }
 }
