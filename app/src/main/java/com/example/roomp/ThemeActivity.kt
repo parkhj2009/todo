@@ -59,7 +59,6 @@
         base: Color,
         onBaseColorChange: (Color) -> Unit) {
         val context = LocalContext.current
-        val scrollState = rememberScrollState()
         Scaffold(
             containerColor = Color.White,
             topBar = {
@@ -101,19 +100,19 @@
                 )
 
                 //테마 선택
-                color(Color(0xFF4F9F9C)) {
+                Tcolor(Color(0xFF4F9F9C)) {
                     onBaseColorChange(it)
                 }
 
-                color(Color(0xFF1b1c1f)) {
+                Tcolor(Color(0xFF1b1c1f)) {
                     onBaseColorChange(it)
                 }
 
-                color(Color(0xFFd85040)) {
+                Tcolor(Color(0xFFd85040)) {
                     onBaseColorChange(it)
                 }
 
-                color(Color(0xFF3875ea)) {
+                Tcolor(Color(0xFF3875ea)) {
                     onBaseColorChange(it)
                 }
 
@@ -142,7 +141,7 @@
 
 
     @Composable
-    fun color(base: Color, onClick:(Color)->Unit){
+    fun Tcolor(base: Color, onClick:(Color)->Unit){
         Box(
             modifier = Modifier
                 .padding(
