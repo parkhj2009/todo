@@ -42,8 +42,7 @@ android {
     }
 }
 
-dependencies {
-    implementation(libs.androidx.appcompat)
+dependencies { implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
@@ -53,7 +52,7 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
 
     implementation(libs.accompanist.systemuicontroller)
-    ksp(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler.v250)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
