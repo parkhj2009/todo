@@ -18,6 +18,7 @@ import androidx.room.Update
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.time.LocalDateTime
 
 class Room : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +36,8 @@ class Room : ComponentActivity() {
 
 @Entity( tableName = "todolist")
 data class ToDoList(
-    val task: String,
-    val time: Boolean
+    val task: LocalDateTime,
+    val isDone: Boolean
 ){
     @PrimaryKey(autoGenerate = true) var id: Int = 0
 }
